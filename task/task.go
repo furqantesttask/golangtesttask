@@ -39,8 +39,27 @@ func AverageNumber(str string) float64 {
 			}
 		}
 		average = (numbers_total / numbers_count)
+	} else {
+		return 0.0
 	}
 	return average
+}
+
+func WholeStory(str string) string {
+
+	var storyText []string
+	if TestValidity(str) {
+
+		splittedArray := strings.Split(str, "-")
+		for index := 0; index < len(splittedArray); index++ {
+			if !modChecker(index) {
+				storyText = append(storyText, splittedArray[index])
+			}
+		}
+	} else {
+		return ""
+	}
+	return strings.Join(storyText, " ")
 }
 
 func modChecker(i int) bool {
