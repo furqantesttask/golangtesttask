@@ -4,7 +4,9 @@ import (
 	"strconv"
 	"strings"
 	"math"
+	"math/rand"
 	"sort"
+	"time"
 )
 
 func TestValidity(str string) bool {
@@ -104,6 +106,38 @@ func StoryStats(str string) (string, string, float64, []string) {
 		return "", "", 0.0, emptyString
 	}
 	return shortestWord, longestWord, averageWordLength, averageWordLengthList
+}
+
+func Generate(validityFlag bool) string {
+
+	var storySequence string
+	rand.Seed(time.Now().UnixNano())
+	maxWordLen := 4294967295
+	totalSequences := 1 + rand.Intn(10)
+	var word, number string
+
+	for i := 0; i < totalSequences; i++ {
+		word = randSeq(1 + rand.Intn(10))
+
+		number = strconv.Itoa(rand.Intn(maxWordLen))
+
+		storySequence += number + "-" + word + "-"
+	}
+
+	if validityFlag == true {
+		storySequence = storySequence[:len(storySequence)-1]
+	}
+	return storySequence
+}
+
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randSeq(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
 }
 
 func modChecker(i int) bool {
