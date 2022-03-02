@@ -3,6 +3,8 @@ package task
 import (
 	"strconv"
 	"strings"
+	"math"
+	"sort"
 )
 
 func TestValidity(str string) bool {
@@ -60,6 +62,48 @@ func WholeStory(str string) string {
 		return ""
 	}
 	return strings.Join(storyText, " ")
+}
+
+func StoryStats(str string) (string, string, float64, []string) {
+
+		var shortestWord, longestWord string
+		var averageWordLength            float64
+		var averageWordLengthList        []string
+		var storyText []string   
+		wordCount := 0.0         
+		accumulatedLength := 0.0
+
+	if TestValidity(str) {
+
+		splitted_array := strings.Split(str, "-")
+
+		for index := 0; index < len(splitted_array); index++ {
+			if !modChecker(index) {
+				storyText = append(storyText, splitted_array[index])
+				wordCount++
+				accumulatedLength += float64(len(splitted_array[index]))
+			}
+		}
+
+		averageWordLength = accumulatedLength / wordCount
+
+		sort.Slice(storyText, func(i, j int) bool {
+			return len(storyText[i]) < len(storyText[j])
+		})
+
+		shortestWord = storyText[0]
+		longestWord = storyText[len(storyText)-1] 
+
+		for _, word := range storyText {
+			if len(word) == int(math.Ceil(averageWordLength)) || len(word) == int(math.Floor(averageWordLength)) {
+				averageWordLengthList = append(averageWordLengthList, word)
+			}
+		}
+	} else {
+		var emptyString []string
+		return "", "", 0.0, emptyString
+	}
+	return shortestWord, longestWord, averageWordLength, averageWordLengthList
 }
 
 func modChecker(i int) bool {
