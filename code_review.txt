@@ -1,0 +1,70 @@
+======================================
+	CODE REVIEW `storyStats`:
+======================================
+
+// have to change some line(s) of code to make this work
+// m["average"] = fmt.Sprint(AverageNumber(str)) is wrong
+// it should be changed to use fmt.Sprintf, like this:
+// m["average"] = fmt.Sprintf("%f", AverageNumber(str))
+
+// the sequence needs to be split according to a dash/hyphen ("-") and not a space (" ")
+// this makes the shortest and longest words generated to be incorrect
+// also, returning an error when an input in invalid is a good practice which should be done
+
+// test cases are not passing with this piece of code
+// test cases fail when invalid strings are passed in as argument
+
+// needs to return 4 things but is missing one thing which is - list of words
+
+// average word length is calculated wrong, it doesnt meant to calculate the average of all numbers but the average 
+// length of all ASCII words in the sequence that is generated
+
+======================================
+
+
+/*
+ * The function storyStats returns four things:
+ * the shortest word
+ * the longest word
+ * the average word length
+ * the list of words that are of length equal to the average word rounded up and down, or empty list if such words do not exist. 
+ */
+func storyStats(str string) (map[string]string, error) {
+	var err error
+	m := make(map[string]string)
+	m["shortest"] = ""
+	m["longest"] = ""
+	m["average"] = ""
+
+	str = strings.TrimSpace(str)
+	if str == "" {
+		err = errors.New("can't work empty string")
+		return nil, err
+	}
+	var shortest int
+	var longest int
+	words := strings.Fields(str)
+
+	for index, element := range words {
+		if index == 0 {
+			// set intail values
+			shortest = len(element)
+			longest = len(element)
+			m["shortest"] = element
+			m["longest"] = element
+			continue
+		}
+		// check longest and shotest words
+		if shortest > len(element) {
+			m["shortest"] = element
+			shortest = len(element)
+		}
+		if longest < len(element) {
+			m["longest"] = element
+			longest = len(element)
+		}
+	}
+	m["average"] = fmt.Sprint(averageNumber(str))
+
+	return m, err
+}
